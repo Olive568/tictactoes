@@ -15,7 +15,7 @@ namespace tictactoes
         static Random rnd = new Random();
         static void Main(string[] args)
         {
-            int[,] board = new int[2, 2];
+            int[,] board = new int[3, 3];
             ini(board);
             game(board);
         }
@@ -39,7 +39,23 @@ namespace tictactoes
                 display(board);
                 if (gamepla == 0 || gamepla % 2 == 0 )
                 {
-                    if(turn == 0 || turn % 2 ==0)
+                        if (turn == 0 || turn % 2 == 0)
+                        {
+                            Console.WriteLine("your turn. pick an X and Y coordinate <0-2,0-2>");
+                            string choice = Console.ReadLine();
+                            string[] cho = choice.Split('-');
+                            int x = int.Parse(cho[0]);
+                            int y = int.Parse(cho[1]);
+                            board[x, y] = 1;
+                        }
+                        else if (turn == 1 || turn % 2 == 1)
+                        {
+                            Logic(board);
+                        }
+                }
+                else if(gamepla == 1 || gamepla % 2 == 1)
+                {
+                    if (turn == 1 || turn % 2 == 1)
                     {
                         Console.WriteLine("your turn. pick an X and Y coordinate <0-2,0-2>");
                         string choice = Console.ReadLine();
@@ -48,10 +64,23 @@ namespace tictactoes
                         int y = int.Parse(cho[1]);
                         board[x, y] = 1;
                     }
-                    else if (turn == 1 || turn % 2 == 1)
+                    else if (turn == 0 || turn % 2 == 0)
                     {
                         Logic(board);
                     }
+                }
+                int check = checking(board, cont);
+                else if (check == 0)
+                {
+                    cont = false;
+                    Console.WriteLine("Computer Wins!");
+                    comwin++;
+                }
+                else if (check == 1)
+                {
+                    cont = false;
+                    Console.WriteLine("Player Wins!");
+                    playwin++;
                 }
             }
         }
@@ -108,6 +137,39 @@ namespace tictactoes
                 }
             }
             return board;
+        }
+        static int checking(int[,] board, bool cont) 
+        {
+            //check horizontal
+            for (int x = 0; x < 2;x++) 
+            {
+                if(board[x,0] + board[x,1] + board[x,2] == 3)
+                {
+                    return 1;
+                }
+                else if (board[x, 0] + board[x, 1] + board[x, 2] == -3)
+                {
+                    return 0;
+                }
+            }
+            //check vertical
+            for (int y = 0; y < 2;y++) 
+            {
+                if (board[0,y] + board[1,y] + board[2,y] == 3)
+                {
+                    return 1;
+                }
+                else if (board[0, y] + board[1, y] + board[2, y] == -3)
+                {
+                    return 0;
+                }
+            }
+            //check slant
+            if (board[0,0] + board[1,1] + board[2,2] == 3 || board[0,2] + board[1,1] + board[0,2] == 3)
+                return 1;
+            else if (board[0, 0] + board[1, 1] + board[2, 2] == -3 || board[0, 2] + board[1, 1] + board[0, 2] == -3)
+                return 0;
+            return -1;
         }
     }
 }
